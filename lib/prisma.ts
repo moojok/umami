@@ -21,7 +21,7 @@ const POSTGRESQL_DATE_FORMATS = {
 };
 
 function toUuid(): string {
-  const db = getDatabaseType(process.env.DATABASE_URL);
+  const db = getDatabaseType(process.env.POSTGRES_PRISMA_URL);
 
   if (db === POSTGRESQL) {
     return '::uuid';
@@ -33,7 +33,7 @@ function toUuid(): string {
 }
 
 function getAddMinutesQuery(field: string, minutes: number) {
-  const db = getDatabaseType(process.env.DATABASE_URL);
+  const db = getDatabaseType(process.env.POSTGRES_PRISMA_URL);
 
   if (db === POSTGRESQL) {
     return `${field} + interval '${minutes} minute'`;
@@ -45,7 +45,7 @@ function getAddMinutesQuery(field: string, minutes: number) {
 }
 
 function getDateQuery(field: string, unit: string, timezone?: string): string {
-  const db = getDatabaseType(process.env.DATABASE_URL);
+  const db = getDatabaseType(process.env.POSTGRES_PRISMA_URL);
 
   if (db === POSTGRESQL) {
     if (timezone) {
@@ -66,7 +66,7 @@ function getDateQuery(field: string, unit: string, timezone?: string): string {
 }
 
 function getTimestampInterval(field: string): string {
-  const db = getDatabaseType(process.env.DATABASE_URL);
+  const db = getDatabaseType(process.env.POSTGRES_PRISMA_URL);
 
   if (db === POSTGRESQL) {
     return `floor(extract(epoch from max(${field}) - min(${field})))`;
@@ -198,7 +198,7 @@ function parseFilters(
 }
 
 async function rawQuery(query: string, params: never[] = []): Promise<any> {
-  const db = getDatabaseType(process.env.DATABASE_URL);
+  const db = getDatabaseType(process.env.POSTGRES_PRISMA_URL);
 
   if (db !== POSTGRESQL && db !== MYSQL) {
     return Promise.reject(new Error('Unknown database.'));
